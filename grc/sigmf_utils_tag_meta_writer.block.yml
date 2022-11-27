@@ -1,0 +1,40 @@
+id: sigmf_utils_tag_meta_writer
+label: SigMF Tag Metafile Writer
+category: 'SigMF'
+
+parameters:
+- id: filename
+  label: Filename
+  dtype: file_save
+- id: freq
+  label: Frequency (Hz)
+  dtype: float
+- id: rate
+  label: Samp Rate (Hz)
+  dtype: int
+- id: label
+  label: Annotation Label
+  dtype: string
+  default: use_burst_id
+  options: ['use_burst_id', 'use_snr_db']
+  option_labels: [Use Burst ID, Use SNR]
+- id: dtype
+  label: SigMF Data Type
+  dtype: string
+  default: 'ci16_le'
+  options: ['ci16_le', 'cf32_le']
+  option_labels: [Short, Float]
+  hide: part
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: 1
+  optional: 0
+
+templates:
+  imports: import sigmf_utils
+  make: sigmf_utils.tag_meta_writer(${filename}, ${freq}, ${rate}, ${label}, ${dtype})
+
+file_format: 1

@@ -1,0 +1,39 @@
+id: sigmf_utils_pdu_meta_writer
+label: SigMF PDU Metafile Writer
+category: 'SigMF'
+
+parameters:
+- id: filename
+  label: Filename
+  dtype: file_save
+- id: freq
+  label: Frequency (Hz)
+  dtype: float
+- id: rate
+  label: Samp Rate (Hz)
+  dtype: int
+- id: label
+  label: Annotation Label
+  dtype: string
+  default: use_burst_id
+  options: ['use_burst_id', 'use_snr_db']
+  option_labels: [Use Burst ID, Use SNR]
+- id: dtype
+  label: SigMF Data Type
+  dtype: string
+  default: 'ci16_le'
+  options: ['ci16_le', 'cf32_le']
+  option_labels: [Short, Float]
+  hide: part
+
+inputs:
+- label: in
+  domain: message
+  id: in
+  optional: 1
+
+templates:
+  imports: import sigmf_utils
+  make: sigmf_utils.pdu_meta_writer(${filename}, ${freq}, ${rate}, ${label}, ${dtype})
+
+file_format: 1
