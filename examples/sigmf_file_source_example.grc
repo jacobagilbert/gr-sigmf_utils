@@ -42,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 388.0]
+    coordinate: [520, 388.0]
     rotation: 0
     state: enabled
 - name: throttle_rate
@@ -61,7 +61,7 @@ blocks:
   id: blocks_throttle
   parameters:
     affinity: ''
-    alias: ''
+    alias: throttle
     comment: ''
     ignoretag: 'True'
     maxoutbuf: '0'
@@ -73,7 +73,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 244.0]
+    coordinate: [280, 244.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -170,7 +170,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 316.0]
+    coordinate: [792, 316.0]
     rotation: 0
     state: true
 - name: qtgui_waterfall_sink_x_0
@@ -231,7 +231,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 228.0]
+    coordinate: [792, 228.0]
     rotation: 0
     state: true
 - name: sigmf_file
@@ -251,29 +251,11 @@ blocks:
     coordinate: [536, 28.0]
     rotation: 0
     state: true
-- name: sigmf_utils_add_tags_from_sigmf_0
-  id: sigmf_utils_add_tags_from_sigmf
-  parameters:
-    add_annotation_tags: 'True'
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    metadata: sigmf_file
-    minoutbuf: '0'
-    type: complex
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [616, 324.0]
-    rotation: 0
-    state: true
-- name: sigmf_utils_sigmf_file_source_0
+- name: sigmf_file_source
   id: sigmf_utils_sigmf_file_source
   parameters:
     affinity: ''
-    alias: ''
+    alias: sigmf_file_source
     begin_tag: pmt.intern('asdf')
     comment: ''
     length: '0'
@@ -289,13 +271,31 @@ blocks:
     coordinate: [56, 212.0]
     rotation: 0
     state: true
+- name: sigmf_utils_add_tags_from_sigmf_0
+  id: sigmf_utils_add_tags_from_sigmf
+  parameters:
+    add_annotation_tags: 'True'
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    metadata: sigmf_file
+    minoutbuf: '0'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 324.0]
+    rotation: 0
+    state: true
 
 connections:
 - [blocks_throttle_0, '0', qtgui_waterfall_sink_x_0, '0']
 - [blocks_throttle_0, '0', sigmf_utils_add_tags_from_sigmf_0, '0']
+- [sigmf_file_source, '0', blocks_throttle_0, '0']
 - [sigmf_utils_add_tags_from_sigmf_0, '0', qtgui_time_sink_x_0, '0']
-- [sigmf_utils_sigmf_file_source_0, '0', blocks_throttle_0, '0']
 
 metadata:
   file_format: 1
-  grc_version: 3.9.8.0
+  grc_version: 3.10.4.0

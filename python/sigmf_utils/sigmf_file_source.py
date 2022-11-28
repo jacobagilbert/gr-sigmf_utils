@@ -11,7 +11,7 @@
 from gnuradio import gr
 from gnuradio import blocks
 import pmt
-from sigmf import sigmffile
+import json
 from os.path import isfile, splitext
 
 VALID_SIGMF_INPUT_TYPES = ['ci16_le', 'cf32_le']
@@ -33,38 +33,40 @@ class sigmf_file_source(gr.hier_block2):
         repeat:         repeat the data (`tags` generated on the start of each repeat)
     """
     def __init__(self, sigmf_filename, output_type, nsamples, tags, repeat):
-        if output_type not in VALID_SIGMF_OUTPUT_TYPES:
-            print(f'ERROR, This block does not support requested output type {output_type}')
-
+        # Determine the SigMF meta and data files
         filebase, ext = splitext(sigmf_filename)
         if ext not in ['.sigmf-meta', '.sigmf-data', '.sigmf-']:
             filebase = sigmf_filename
         meta_filename = filebase + '.sigmf-meta'
         data_filename = filebase + '.sigmf-data'
         if not isfile(meta_filename):
-            raise RuntimeError(f'SigMF meta file {meta_filename} does not exist')
+            raise ValueError(f'SigMF meta file {meta_filename} does not exist')
         if not isfile(data_filename):
-            raise RuntimeError(f'SigMF data file {data_filename} does not exist')
-        print(f'Using SigMF file: {meta_filename}')
+            raise ValueError(f'SigMF data file {data_filename} does not exist')
+
         # Parse the SigMF File for Metadata
-        sigmf_metadata = sigmffile.fromfile(meta_filename)
-        input_type = sigmf_metadata.get_global_field('core:datatype')
+        with open(meta_filename, 'r') as f:
+            sigmf_metadata = json.load(f)
+        if 'global' not in sigmf_metadata or 'captures' not in sigmf_metadata or 'annotations' not in sigmf_metadata:
+            raise RuntimeError(f'Invalid SigMF Metadata')
+
+        # Setup and validate the data types
+        input_type = sigmf_metadata['global'].get('core:datatype')
         if input_type not in VALID_SIGMF_INPUT_TYPES:
-            print(f'ERROR, This block does not support requested input type {input_type}')
-        input_size = sigmf_metadata.get_sample_size()
-        if input_type == 'ci16_le':
-            # for short complex tyoes, GR will read these one I or Q part at a time
-            input_size //= 2
+            raise ValueError(f'This block does not support the SigMF data type {input_type}')
+        if output_type not in VALID_SIGMF_OUTPUT_TYPES:
+            raise ValueError(f'This block does not support requested output type {output_type}')
+        input_size = 2 if input_type == 'ci16_le' else 8 # cf32_le
+        output_size = gr.sizeof_short if output_type == 'ci16_le' else gr.sizeof_gr_complex
 
-        output_size = gr.sizeof_gr_complex
-        if output_type == 'ci16_le':
-            output_size = gr.sizeof_short
-
-        print(f'SigMF Source is reading data of type {input_type}({input_size}) and producing data of type {output_type}({output_size})')
+        # Construct the hier block
         gr.hier_block2.__init__(self,
             "sigmf_file_source",
             gr.io_signature(0, 0, 0),               # Input signature
-            gr.io_signature(1, 1, output_size))   # Output signature
+            gr.io_signature(1, 1, output_size))     # Output signature
+        self.log = gr.logger('gr_log.' + self.to_basic_block().alias())
+        self.log.info(f'SigMF File Source using metafile: {meta_filename}')
+        self.log.notice(f'SigMF File Source reading data of type {input_type}, producing data of type {output_type}')
 
         ##################################################
         # Blocks and Connections
