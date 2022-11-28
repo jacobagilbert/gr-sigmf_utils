@@ -1,0 +1,45 @@
+id: sigmf_utils_sigmf_file_source
+label: SigMF File Source
+category: 'SigMF'
+
+templates:
+  imports: |-
+    import sigmf_utils
+    import pmt
+  make: sigmf_utils.sigmf_file_source(${sigmf_filename}, ${output_type.name}, ${length}, ${begin_tag}, ${repeat})
+
+
+parameters:
+- id: sigmf_filename
+  label: Filename
+  dtype: file_open
+- id: output_type
+  label: Output Type
+  dtype: enum
+  default: 'complex'
+  options: [complex, short]
+  option_attributes:
+    name: ["'cf32_le'", "'ci16_le'"]
+- id: repeat
+  label: Repeat
+  dtype: enum
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Yes', 'No']
+- id: length
+  label: Num Samples
+  dtype: int
+  default: '0'
+- id: begin_tag
+  label: Add begin tag
+  dtype: raw
+  default: pmt.PMT_NIL
+
+outputs:
+- domain: stream
+  dtype: ${ output_type }
+  vlen: 1
+  optional: false
+
+
+file_format: 1

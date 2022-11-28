@@ -1,0 +1,41 @@
+id: sigmf_utils_add_tags_from_sigmf
+label: Add Tags From SigMF
+category: 'SigMF'
+
+templates:
+  imports: |-
+    import sigmf_utils
+    import numpy
+  make: sigmf_utils.add_tags_from_sigmf(${type.type}, ${metadata}, ${add_annotation_tags})
+
+
+parameters:
+- id: type
+  label: IO Type
+  dtype: enum
+  options: [complex, short]
+  option_attributes:
+    type: [numpy.complex64, numpy.int16]
+  hide: part
+- id: metadata
+  label: SigMF Metadata
+  dtype: raw
+  default: {}
+- id: add_annotation_tags
+  label: Add Annotation Tags
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Yes', 'No']
+
+inputs:
+- domain: stream
+  dtype: ${ type }
+  vlen: 1
+
+outputs:
+- domain: stream
+  dtype: ${ type }
+  vlen: 1
+
+file_format: 1

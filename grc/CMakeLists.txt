@@ -8,5 +8,7 @@
 
 install(FILES
     sigmf_utils_pdu_meta_writer.block.yml
-    sigmf_utils_tag_meta_writer.block.yml DESTINATION share/gnuradio/grc/blocks
+    sigmf_utils_tag_meta_writer.block.yml
+    sigmf_utils_sigmf_file_source.block.yml
+    sigmf_utils_add_tags_from_sigmf.block.yml DESTINATION share/gnuradio/grc/blocks
 )

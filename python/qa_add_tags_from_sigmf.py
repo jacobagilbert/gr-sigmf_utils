@@ -8,9 +8,9 @@
 
 from gnuradio import gr, gr_unittest
 # from gnuradio import blocks
-from tag_meta_writer import tag_meta_writer
+from add_tags_from_sigmf import add_tags_from_sigmf
 
-class qa_tag_meta_writer(gr_unittest.TestCase):
+class qa_add_tags_from_sigmf(gr_unittest.TestCase):
 
     def setUp(self):
         self.tb = gr.top_block()
@@ -20,7 +20,7 @@ class qa_tag_meta_writer(gr_unittest.TestCase):
 
     def test_instance(self):
         # FIXME: Test will fail until you pass sensible arguments to the constructor
-        instance = tag_meta_writer()
+        instance = add_tags_from_sigmf()
 
     def test_001_descriptive_test_name(self):
         # set up fg
@@ -29,4 +29,4 @@ class qa_tag_meta_writer(gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_tag_meta_writer)
+    gr_unittest.run(qa_add_tags_from_sigmf)

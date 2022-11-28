@@ -23,7 +23,9 @@ GR_PYTHON_INSTALL(
     FILES
     __init__.py
     pdu_meta_writer.py
-    tag_meta_writer.py DESTINATION ${GR_PYTHON_DIR}/sigmf_utils
+    tag_meta_writer.py
+    sigmf_file_source.py
+    add_tags_from_sigmf.py DESTINATION ${GR_PYTHON_DIR}/sigmf_utils
 )
 
 ########################################################################
@@ -42,3 +44,5 @@ add_custom_target(
 )
 GR_ADD_TEST(qa_pdu_meta_writer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_pdu_meta_writer.py)
 GR_ADD_TEST(qa_tag_meta_writer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_meta_writer.py)
+GR_ADD_TEST(qa_sigmf_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sigmf_source.py)
+GR_ADD_TEST(qa_add_tags_from_sigmf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_add_tags_from_sigmf.py)

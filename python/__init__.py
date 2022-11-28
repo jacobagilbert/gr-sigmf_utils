@@ -22,4 +22,6 @@ except ModuleNotFoundError:
 # import any pure python here
 from .pdu_meta_writer import pdu_meta_writer
 from .tag_meta_writer import tag_meta_writer
+from .sigmf_file_source import sigmf_file_source
+from .add_tags_from_sigmf import add_tags_from_sigmf
 #
