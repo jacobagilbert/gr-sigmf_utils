@@ -47,6 +47,7 @@ class sigmf_file_source(gr.hier_block2):
             raise ValueError(f'SigMF meta file {meta_filename} does not exist')
         if not isfile(data_filename):
             raise ValueError(f'SigMF data file {data_filename} does not exist')
+        gr.log.info(f'SigMF File Source using metafile: {meta_filename}')
 
         # Parse the SigMF File for Metadata
         with open(meta_filename, 'r') as f:
@@ -68,9 +69,8 @@ class sigmf_file_source(gr.hier_block2):
             "sigmf_file_source",
             gr.io_signature(0, 0, 0),               # Input signature
             gr.io_signature(1, 1, output_size))     # Output signature
-        self.log = gr.logger('gr_log.' + self.to_basic_block().alias())
-        self.log.info(f'SigMF File Source using metafile: {meta_filename}')
-        self.log.info(f'SigMF File Source reading data of type {input_type}, producing data of type {output_type}')
+
+        gr.log.info(f'SigMF File Source reading data of type {input_type}, producing data of type {output_type}')
 
         ##################################################
         # Blocks and Connections

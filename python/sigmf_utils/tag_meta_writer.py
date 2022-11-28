@@ -47,7 +47,7 @@ class tag_meta_writer(gr.sync_block):
         if not filename.endswith('.sigmf-meta'):
             pre, ext = splitext(filename)
             self.d_filename = pre + '.sigmf-meta'
-            gr.log.warn("SigMF metadata filename does not end with `sigmf-meta` - using " + self.d_filename)
+            gr.log.warn(f"SigMF metadata filename does not end with `sigmf-meta` - using {self.d_filename}")
 
         self.freq = freq
         self.rate = rate
@@ -65,9 +65,9 @@ class tag_meta_writer(gr.sync_block):
             f = open(self.d_filename, 'w+')
             f.write(json.dumps(self.d_dict,indent=4))
             f.close()
-            print(f"wrote file {self.d_filename} with {len(self.d_dict['annotations'])} annotations")
+            gr.log.info(f"wrote file {self.d_filename} with {len(self.d_dict['annotations'])} annotations")
         except IOError as e:
-            print("ERROR: could write to {}".format(self.d_filename), "because", e)
+            gr.log.error(f"Could not write to {self.d_filename} because {e}")
             quit()
 
         return True
@@ -76,13 +76,13 @@ class tag_meta_writer(gr.sync_block):
         self.d_dict = {}
         self.d_dict['captures'] = sigmf_captures
         self.d_dict['global'] = sigmf_global
-        self.d_dict['annotations'] = sigmf_annotationss
+        self.d_dict['annotations'] = sigmf_annotations
 
     def add_annotation(self, burst_id, end_offset):
         anno = {}
         metadata = self.in_progress_tags.pop(burst_id, None)
         if metadata is None:
-            print(f'\tERROR: attempted to retrieve metadata for burst {burst_id} that has not been enqueued yet!!')
+            gr.log.error(f"Attempted to retrieve metadata for burst {burst_id} that has not been enqueued yet!!")
             return
 
         anno['core:sample_start'] = metadata.get('sample_start', None)
@@ -106,13 +106,11 @@ class tag_meta_writer(gr.sync_block):
                 val_dict['sample_start'] = tag.offset
                 burst_id = val_dict.get('burst_id', None)
                 if pmt.eqv(tag.key, pmt.intern("new_burst")) and burst_id is not None:
-                    print(f'\t\tenqueueing burst {burst_id}')
                     self.in_progress_tags[burst_id] = val_dict
                 elif pmt.eqv(tag.key, pmt.intern("gone_burst")) and burst_id is not None:
-                    print(f'\t\twriting anno for burst {burst_id}')
                     self.add_annotation(burst_id, tag.offset)
             except:
-                print(f'error processing tag...\n\tKEY: {tag.key}\n\tVAL: {tag.value}')
+                gr.log.warn(f"error processing tag...\n\tKEY: {tag.key}\n\tVAL: {tag.value}")
         return len(in0)
 
 

@@ -69,9 +69,9 @@ class pdu_meta_writer(gr.basic_block):
             f = open(self.d_filename, 'w+')
             f.write(json.dumps(self.d_dict,indent=4))
             f.close()
-            print(f"wrote file {self.d_filename} with {len(self.d_dict['annotations'])} annotations")
+            gr.log.info(f"wrote file {self.d_filename} with {len(self.d_dict['annotations'])} annotations")
         except IOError as e:
-            print("ERROR: could write to {}".format(self.d_filename), "because", e)
+            gr.log.error(f"Could not write to {self.d_filename} because {e}")
             quit()
 
         return True
@@ -84,7 +84,7 @@ class pdu_meta_writer(gr.basic_block):
 
     def handler(self, pdu):
       if not pmt.is_pdu(pdu):
-        print('input is not a PDU!, dropping')
+        gr.log.debug("Input is not a PDU!, dropping")
 
       # there are two basic modes here: tags_to_pdu or fft burst detector
       # in either case we need to extract the following fields for the annotation:
@@ -120,7 +120,7 @@ class pdu_meta_writer(gr.basic_block):
           eob = sob + anno_len
 
         except Exception as e:
-          print('could not parse required data from message', pmt.car(pdu), ':',e)
+          gr.log.warn(f"could not parse required data from message {pmt.car(pdu)}: {e}")
           return
 
       else:
@@ -139,7 +139,7 @@ class pdu_meta_writer(gr.basic_block):
           b_id = pmt.to_python(pmt.dict_ref(meta, pmt.intern('burst_id'), pmt.PMT_NIL))
 
         except Exception as e:
-          print('could not parse required data from message', pmt.car(pdu), ':',e)
+          gr.log.warn(f"could not parse required data from message {pmt.car(pdu)}: {e}")
           return
 
 
@@ -157,7 +157,7 @@ class pdu_meta_writer(gr.basic_block):
       # append the annotation
       try:
         if isnan(snr) or isinf(snr):
-          print("Got illegal SNR value in",meta)
+          gr.log.warn(f"Got illegal SNR value in {meta}")
           self.d_dict['annotations'].append({'core:sample_start': sob-self.soo,
                       'core:sample_count': eob-sob, 'core:freq_upper_edge': int(freq+bw/2),
                       'core:freq_lower_edge': int(freq-bw/2), 'core:description': label})
@@ -167,4 +167,4 @@ class pdu_meta_writer(gr.basic_block):
                       'core:freq_lower_edge': int(freq-bw/2), 'core:description': label,
                       'capture_details:SNRdB': snr})
       except Exception as e:
-        print('could not form annotation from message', pmt.car(pdu), ':', e)
+        gr.log.warn(f"could not form annotation from message {pmt.car(pdu)}: {e}")

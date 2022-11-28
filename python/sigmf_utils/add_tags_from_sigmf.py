@@ -52,7 +52,6 @@ class add_tags_from_sigmf(gr.sync_block):
             name="add_tags_from_sigmf",
             in_sig=[dtype],
             out_sig=[dtype])
-        self.log = gr.logger('gr_log.' + self.to_basic_block().alias())
 
         self.interleaved = True if dtype == numpy.int16 else False
 
@@ -60,14 +59,14 @@ class add_tags_from_sigmf(gr.sync_block):
             self.sigmf_metadata = metadata
         elif isinstance(metadata, str) and metadata.endswith('.sigmf-meta'):
             with open(metadata, 'r') as f:
-                self.log.info(f'Loading SigMF metadata from {metadata}')
+                gr.log.info(f'Loading SigMF metadata from {metadata}')
                 self.sigmf_metadata = json.load(f)
         else:
             raise ValueError(f'Invalid SigMF metadata specification {metadata}')
         sigmf_utils.check_metadata(self.sigmf_metadata)
 
         if ncaps := len(self.sigmf_metadata['captures']) > 1:
-            self.log.warn(f'SigMF has {ncaps} captures, only the first will be used!')
+            gr.log.warn(f'SigMF has {ncaps} captures, only the first will be used!')
 
         self.begin_tags = []
         self.sample_rate = self.sigmf_metadata['global'].get('core:sample_rate')
@@ -90,11 +89,13 @@ class add_tags_from_sigmf(gr.sync_block):
                 offset = offset * 2 if self.interleaved else offset
                 end = end * 2 if self.interleaved else end
                 tag_dict = {'sample_rate': self.sample_rate, 'center_frequency': self.frequency, 'burst_id': ii}
-                f_lower = anno.get('core:core:freq_lower_edge')
-                f_upper = anno.get('core:core:freq_upper_edge')
+                f_lower = anno.get('core:freq_lower_edge')
+                f_upper = anno.get('core:freq_upper_edge')
                 if f_lower and f_upper:
-                    tag_dict['bandwidth'] = f_upper - f_lower
-                    tag_dict['relative_frequency'] = ((f_upper - f_lower) / 2 - self.frequency) / self.sample_rate
+                    tag_dict['bandwidth'] = (f_upper - f_lower) * 1.0
+                    freq = f_lower + tag_dict['bandwidth'] / 2.0
+                    tag_dict['relative_frequency'] = (freq - self.frequency) / self.sample_rate
+                tag_dict['magnitude']=0.0   # dumb... but this field needs to be present
                 self.anno_tags.append(gr.tag_utils.python_to_tag((offset, sob, pmt.to_pmt(tag_dict))))
                 self.anno_tags.append(gr.tag_utils.python_to_tag((end, eob, pmt.to_pmt({'burst_id': ii}))))           
 

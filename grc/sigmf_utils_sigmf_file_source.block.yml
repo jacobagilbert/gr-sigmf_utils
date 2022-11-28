@@ -22,10 +22,10 @@ parameters:
     name: ["'cf32_le'", "'ci16_le'"]
 - id: repeat
   label: Repeat
-  dtype: enum
-  default: 'True'
-  options: ['True', 'False']
-  option_labels: ['Yes', 'No']
+  dtype: bool
+  default: true
+  options: [true, false]
+  option_labels: [true, false]
 - id: length
   label: Num Samples
   dtype: int
@@ -37,10 +37,10 @@ parameters:
   hide: part
 - id: add_sigmf_tags
   label: Add SigMF Tags
-  dtype: enum
-  default: 'True'
-  options: ['True', 'False']
-  option_labels: ['Yes', 'No']
+  dtype: bool
+  default: true
+  options: [true, false]
+  option_labels: [true, false]
 
 outputs:
 - domain: stream
