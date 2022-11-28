@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright J. A. Gilbert, 2022
+# Copyright 2022 J. A. Gilbert
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright J. A. Gilbert, 2022
+# Copyright 2022 J. A. Gilbert
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -20,7 +20,7 @@ class qa_sigmf_file_source(gr_unittest.TestCase):
 
     def test_instance(self):
         # FIXME: Test will fail until you pass sensible arguments to the constructor
-        instance = sigmf_source()
+        instance = sigmf_file_source()
 
     def test_001_descriptive_test_name(self):
         # set up fg
