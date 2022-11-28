@@ -17,8 +17,25 @@ from math import isnan, isinf
 
 class tag_meta_writer(gr.sync_block):
     """
-    This block takes GR stream tags with gr-fhss_utils style metadata and
-    produces SigMF annotations from them.
+    This block takes GR stream tags with gr-fhss_utils style metadata and produces
+    SigMF annotations from them. The following tags data are processed:
+
+    `new_burst` - Value is a dictionary similar to the gr-fhss_utils tags:
+        - `sample_rate` - input sample rate of the digitized data
+        - `center_frequency` - the center frequency of the digitized data
+        - `burst_id` - unique sequential identification number for the signal tagged
+        - `bandwidth` - double representing bandwidth of the specific signal tagged
+        - `relative_frequency` - relative center frequency of the annotation (-0.5 to 0.5]
+    `gone_burst` - Value is a dictionary similar to the gr-fhss_utils tags:
+        - `burst_id` - unique sequential identification number for the signal tagged
+
+    Block paramters:
+
+        filename:   SigMF metadata file to generate
+        freq:       SigMF `captures` `core:frequency` field
+        rate:       SigMF `global` `core:sample_rate` field
+        label:      Value to use for `core:label` in annotations
+        dtype:      SigMF data type to use for `global` `core:datatype` field
     """
     def __init__(self, filename, freq, rate, label, dtype):
         gr.sync_block.__init__(self,

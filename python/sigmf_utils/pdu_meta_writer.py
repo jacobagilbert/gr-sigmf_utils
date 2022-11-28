@@ -18,7 +18,27 @@ from math import isnan, isinf
 class pdu_meta_writer(gr.basic_block):
     """
     This block accepts PDUs tags with gr-fhss_utils style metadata dictionaries and
-    produces SigMF annotations from them.
+    produces SigMF annotations from them. The following metadata dictionary keys
+    are used:
+
+        - `start_offset` - sample offset of the start of burst
+        - `end_offset` - sample offset of the end of burst
+        - `center_frequency` - center frequency of the annotation
+        - `bandwidth` - double representing annotation bandwidth
+        - `snr_db` - approximate signal to noise ratio of the annotation
+        - `burst_id` - annotation number
+
+    When operating in tags_to_pdu mode, the `end_offset` is inferred from the PDU
+    length and `sample_rate` key, and the `burst_id` key is replaced by `pdu_num`.
+
+    Block paramters:
+
+        filename:   SigMF metadata file to generate
+        freq:       SigMF `captures` `core:frequency` field
+        rate:       SigMF `global` `core:sample_rate` field
+        label:      Value to use for `core:label` in annotations
+        dtype:      SigMF data type to use for `global` `core:datatype` field
+
     """
     def __init__(self, filename, freq, rate, label, dtype):
         gr.basic_block.__init__(self,

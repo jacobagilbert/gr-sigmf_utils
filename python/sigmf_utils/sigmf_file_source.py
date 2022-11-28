@@ -19,7 +19,18 @@ VALID_SIGMF_OUTPUT_TYPES = ['ci16_le', 'cf32_le']
 
 class sigmf_file_source(gr.hier_block2):
     """
-    docstring for block sigmf_file_source
+    This is a simple hier block that abstracts the process of loading a SigMF Recording
+    and making it useful in GNU Radio. Data type conversion is handled by loading the
+    SigMF Metadata file and automatically instantiating blocks to convert to the desired
+    gnuradio output type.
+
+    The rest of the parameters are similar to the file source:
+
+        sigmf_filename: either the sigmf-meta or sigmf-data filename
+        output_type:    gnuradio output type (sigmf data will be converted to this type)
+        nsamples:       number of items to read from the file
+        tags:           key for tag to be placed on the first sample
+        repeat:         repeat the data (`tags` generated on the start of each repeat)
     """
     def __init__(self, sigmf_filename, output_type, nsamples, tags, repeat):
         if output_type not in VALID_SIGMF_OUTPUT_TYPES:

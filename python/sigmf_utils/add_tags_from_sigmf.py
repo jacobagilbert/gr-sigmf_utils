@@ -16,7 +16,36 @@ from gnuradio import gr
 
 class add_tags_from_sigmf(gr.sync_block):
     """
-    docstring for block add_tags_from_sigmf
+    This block will generate stream tags from either a SigMF Metadata or a `.sigmf-meta`
+    file. The following stream tags are generated:
+
+    Global Scope:
+        `sample_rate` - on the first sample generated only
+
+    Captures Scope:
+        `frequency` - first sample only, limited to captures[0] metadata for now
+
+    Annotations Scope (configurable):
+        `new_burst` - Value is a dictionary similar to the gr-fhss_utils tags:
+            - `burst_id` - annotation number (as indexed by annotations list in file)
+            - `bandwidth` - double representing annotation bandwidth
+            - `sample_rate` - from `global` scope metadata
+            - `center_frequency` - from `captures` scope metadata
+            - `relative_frequency` - relative center frequency of the annotation (-0.5 to 0.5]
+        `gone_burst` - Value is a dictionary similar to the gr-fhss_utils tags:
+            - `burst_id` - annotation number (as indexed by annotations list in file)
+
+    Tags are all generated on the first work function call, but their offset values are
+    representative of what is in the SigMF metadata. For complex interleaved types tags
+    are placed on the first (real component) item.
+
+    Block paramters:
+
+        dtype:                  gnuradio data type for streaming inputs
+        metadata:               either a SigMF format metadata dictionary or sigmf-meta
+                                filename to use for tag generation
+        add_annotation_tags:    optional parameter that can be used to control whether
+                                tags for annotations are generated or not
     """
     def __init__(self, dtype, metadata, add_annotation_tags=True):
         gr.sync_block.__init__(self,
