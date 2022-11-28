@@ -10,9 +10,9 @@
 import numpy
 import json
 import pmt
-from sigmf import sigmffile
 from os.path import isfile
 from gnuradio import gr
+import sigmf_utils
 
 class add_tags_from_sigmf(gr.sync_block):
     """
@@ -52,35 +52,30 @@ class add_tags_from_sigmf(gr.sync_block):
             name="add_tags_from_sigmf",
             in_sig=[dtype],
             out_sig=[dtype])
+        self.log = gr.logger('gr_log.' + self.to_basic_block().alias())
+
+        self.interleaved = True if dtype == numpy.int16 else False
 
         if isinstance(metadata, dict):
-            if 'global' in metadata and 'captures' in metadata and 'annotations' in metadata:
-                self.sigmf_metadata = sigmffile.SigMFFile(metadata)
-            else:
-                # something is wrong with the sigmf spec... load this
-                self.sigmf_metadata = sigmffile.SigMFFile()
+            self.sigmf_metadata = metadata
         elif isinstance(metadata, str) and metadata.endswith('.sigmf-meta'):
-            if isfile(metadata):
-                print(f'Loading SigMF metadata from {metadata}')
-                self.sigmf_metadata = sigmffile.fromfile(metadata)
-            else:
-                raise RuntimeError(f'SigMF metadata file {metadata} does not exist')
+            with open(metadata, 'r') as f:
+                self.log.info(f'Loading SigMF metadata from {metadata}')
+                self.sigmf_metadata = json.load(f)
         else:
-            raise RuntimeError(f'Invalid SigMF metadata specification {metadata}')
+            raise ValueError(f'Invalid SigMF metadata specification {metadata}')
+        sigmf_utils.check_metadata(self.sigmf_metadata)
 
-
-        if ncaps := len(self.sigmf_metadata.get_captures()) > 1:
-            print(f'Warning! SigMF has {ncaps} captures, only the first will be used!')
-
+        if ncaps := len(self.sigmf_metadata['captures']) > 1:
+            self.log.warn(f'SigMF has {ncaps} captures, only the first will be used!')
 
         self.begin_tags = []
-        self.sample_rate = self.sigmf_metadata.get_global_info().get('core:sample_rate')
-        self.frequency = self.sigmf_metadata.get_capture_info(0).get('core:frequency')
+        self.sample_rate = self.sigmf_metadata['global'].get('core:sample_rate')
         if self.sample_rate is not None:
             self.begin_tags.append(gr.tag_utils.python_to_tag((0, pmt.intern("sample_rate"), pmt.from_double(self.sample_rate))))
+        self.frequency = self.sigmf_metadata['captures'][0].get('core:frequency')
         if self.frequency is not None:
             self.begin_tags.append(gr.tag_utils.python_to_tag((0, pmt.intern("frequency"), pmt.from_double(self.frequency))))
-            
 
         self.anno_tags = []
         if add_annotation_tags:
@@ -89,9 +84,11 @@ class add_tags_from_sigmf(gr.sync_block):
             # ((burst_id . 0))
             sob = pmt.intern('new_burst')
             eob = pmt.intern('gone_burst')
-            for ii, anno in enumerate(self.sigmf_metadata.get_annotations()):
-                offset = anno.get('core:sample_start')
-                end = offset + anno.get('core:sample_count')
+            for ii, anno in enumerate(self.sigmf_metadata['annotations']):
+                offset = anno.get('core:sample_start', 0)
+                end = offset + anno.get('core:sample_count', offset)
+                offset = offset * 2 if self.interleaved else offset
+                end = end * 2 if self.interleaved else end
                 tag_dict = {'sample_rate': self.sample_rate, 'center_frequency': self.frequency, 'burst_id': ii}
                 f_lower = anno.get('core:core:freq_lower_edge')
                 f_upper = anno.get('core:core:freq_upper_edge')

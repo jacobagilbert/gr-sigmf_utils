@@ -6,7 +6,7 @@ templates:
   imports: |-
     import sigmf_utils
     import pmt
-  make: sigmf_utils.sigmf_file_source(${sigmf_filename}, ${output_type.name}, ${length}, ${begin_tag}, ${repeat})
+  make: sigmf_utils.sigmf_file_source(${sigmf_filename}, ${output_type.name}, ${length}, ${add_begin_tag}, ${repeat}, ${add_sigmf_tags})
 
 
 parameters:
@@ -30,10 +30,17 @@ parameters:
   label: Num Samples
   dtype: int
   default: '0'
-- id: begin_tag
-  label: Add begin tag
+- id: add_begin_tag
+  label: Add Begin Tag
   dtype: raw
   default: pmt.PMT_NIL
+  hide: part
+- id: add_sigmf_tags
+  label: Add SigMF Tags
+  dtype: enum
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Yes', 'No']
 
 outputs:
 - domain: stream

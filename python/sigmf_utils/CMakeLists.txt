@@ -25,7 +25,8 @@ GR_PYTHON_INSTALL(
     pdu_meta_writer.py
     tag_meta_writer.py
     sigmf_file_source.py
-    add_tags_from_sigmf.py DESTINATION ${GR_PYTHON_DIR}/sigmf_utils
+    add_tags_from_sigmf.py
+    sigmf_tools.py DESTINATION ${GR_PYTHON_DIR}/sigmf_utils
 )
 
 ########################################################################
