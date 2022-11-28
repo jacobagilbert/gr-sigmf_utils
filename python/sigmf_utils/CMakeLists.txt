@@ -40,7 +40,7 @@ set(GR_TEST_TARGET_DEPS gnuradio-sigmf_utils)
 add_custom_target(
   copy_module_for_tests ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}
-          ${CMAKE_BINARY_DIR}/test_modules/sigmf_utils/
+          ${PROJECT_BINARY_DIR}/test_modules/gnuradio/sigmf_utils/
 )
 GR_ADD_TEST(qa_pdu_meta_writer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_pdu_meta_writer.py)
 GR_ADD_TEST(qa_tag_meta_writer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_meta_writer.py)

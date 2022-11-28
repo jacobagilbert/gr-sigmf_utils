@@ -32,14 +32,14 @@ list(APPEND sigmf_utils_python_files
     python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(sigmf_utils
-   ../..
+   ../../..
    gr::sigmf_utils
    "${sigmf_utils_python_files}")
 
 # copy bindings extension for use in QA test module
 add_custom_command(TARGET sigmf_utils_python POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sigmf_utils_python>
-    ${CMAKE_BINARY_DIR}/test_modules/sigmf_utils/
+    ${PROJECT_BINARY_DIR}/test_modules/gnuradio/sigmf_utils/
 )
 
-install(TARGETS sigmf_utils_python DESTINATION ${GR_PYTHON_DIR}/sigmf_utils COMPONENT pythonapi)
+install(TARGETS sigmf_utils_python DESTINATION ${GR_PYTHON_DIR}/gnuradio/sigmf_utils COMPONENT pythonapi)

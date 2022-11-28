@@ -8,7 +8,7 @@
 
 from gnuradio import gr, gr_unittest
 # from gnuradio import blocks
-from tag_meta_writer import tag_meta_writer
+from gnuradio.sigmf_utils import tag_meta_writer
 
 class qa_tag_meta_writer(gr_unittest.TestCase):
 

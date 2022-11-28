@@ -11,5 +11,5 @@
 ########################################################################
 install(FILES
     api.h
-    DESTINATION include/sigmf_utils
+    DESTINATION include/gnuradio/sigmf_utils
 )

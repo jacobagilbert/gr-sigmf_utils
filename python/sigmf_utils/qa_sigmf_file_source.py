@@ -8,9 +8,9 @@
 
 from gnuradio import gr, gr_unittest
 # from gnuradio import blocks
-from pdu_meta_writer import pdu_meta_writer
+from gnuradio.sigmf_utils import sigmf_file_source
 
-class qa_pdu_meta_writer(gr_unittest.TestCase):
+class qa_sigmf_file_source(gr_unittest.TestCase):
 
     def setUp(self):
         self.tb = gr.top_block()
@@ -20,7 +20,7 @@ class qa_pdu_meta_writer(gr_unittest.TestCase):
 
     def test_instance(self):
         # FIXME: Test will fail until you pass sensible arguments to the constructor
-        instance = pdu_meta_writer()
+        instance = sigmf_file_source()
 
     def test_001_descriptive_test_name(self):
         # set up fg
@@ -29,4 +29,4 @@ class qa_pdu_meta_writer(gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_pdu_meta_writer)
+    gr_unittest.run(qa_sigmf_file_source)

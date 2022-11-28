@@ -8,7 +8,7 @@
 
 from gnuradio import gr, gr_unittest
 # from gnuradio import blocks
-from add_tags_from_sigmf import add_tags_from_sigmf
+from gnuradio.sigmf_utils import add_tags_from_sigmf
 
 class qa_add_tags_from_sigmf(gr_unittest.TestCase):
 
