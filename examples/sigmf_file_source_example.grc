@@ -34,17 +34,47 @@ options:
 
 blocks:
 - name: throttle_rate
-  id: variable
+  id: variable_qtgui_range
   parameters:
     comment: ''
-    value: 100e3
+    gui_hint: ''
+    label: Throttle
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    outputmsgname: value
+    rangeType: float
+    showports: 'False'
+    start: 10e3
+    step: 1e3
+    stop: 2000e3
+    value: 50e3
+    widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [200, 12.0]
     rotation: 0
-    state: enabled
+    state: true
+- name: blocks_tag_debug_0
+  id: blocks_tag_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    display: 'True'
+    filter: '""'
+    name: ''
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 300.0]
+    rotation: 180
+    state: true
 - name: blocks_throttle_0
   id: blocks_throttle
   parameters:
@@ -54,7 +84,7 @@ blocks:
     ignoretag: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: throttle_rate
+    samples_per_second: throttle_rate/5
     type: complex
     vlen: '1'
   states:
@@ -81,7 +111,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 12.0]
+    coordinate: [552, 12.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -162,7 +192,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 260.0]
+    coordinate: [568, 228.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -220,7 +250,7 @@ blocks:
     marker9: '-1'
     name: '""'
     nconnections: '1'
-    size: 1024*128
+    size: int(throttle_rate)
     srate: '1'
     stemplot: 'False'
     style1: '1'
@@ -259,7 +289,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 340.0]
+    coordinate: [568, 308.0]
     rotation: 0
     state: true
 - name: qtgui_waterfall_sink_x_0
@@ -320,7 +350,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 180.0]
+    coordinate: [568, 148.0]
     rotation: 0
     state: true
 - name: sigmf_file
@@ -332,18 +362,18 @@ blocks:
     label: sigmf_file
     short_id: f
     type: str
-    value: /data/public/dect6.sigmf-meta
+    value: /data/public/dect6.sigmf-data
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 12.0]
+    coordinate: [328, 12.0]
     rotation: 0
     state: true
 - name: sigmf_file_source
   id: sigmf_utils_sigmf_file_source
   parameters:
-    add_begin_tag: pmt.PMT_NIL
+    add_begin_tag: pmt.intern('asdf')
     add_sigmf_tags: 'True'
     affinity: ''
     alias: sigmf_file_source
@@ -363,6 +393,7 @@ blocks:
     state: true
 
 connections:
+- [blocks_throttle_0, '0', blocks_tag_debug_0, '0']
 - [blocks_throttle_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_throttle_0, '0', qtgui_time_sink_x_0, '0']
 - [blocks_throttle_0, '0', qtgui_waterfall_sink_x_0, '0']

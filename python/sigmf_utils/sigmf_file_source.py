@@ -63,6 +63,7 @@ class sigmf_file_source(gr.hier_block2):
             raise ValueError(f'This block does not support requested output type {output_type}')
         input_size = 2 if input_type == 'ci16_le' else 8 # cf32_le
         output_size = gr.sizeof_short if output_type == 'ci16_le' else gr.sizeof_gr_complex
+        nsamples = nsamples * 2 if input_type == 'ci16_le' else nsamples
 
         # Construct the hier block
         gr.hier_block2.__init__(self,
@@ -79,7 +80,7 @@ class sigmf_file_source(gr.hier_block2):
         self.file_source.set_begin_tag(add_begin_tag)
         if add_sigmf_tags:
             tag_type = numpy.int16 if output_type == 'ci16_le' else numpy.complex64
-            self.add_tags = sigmf_utils.add_tags_from_sigmf(tag_type, meta_filename, True)
+            self.add_tags = sigmf_utils.add_tags_from_sigmf(tag_type, meta_filename, True, add_begin_tag)
 
         if input_type == output_type:
             if add_sigmf_tags:
