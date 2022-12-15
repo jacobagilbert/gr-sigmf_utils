@@ -1,6 +1,6 @@
 id: sigmf_utils_tag_meta_writer
 label: SigMF Tag Metafile Writer
-category: 'SigMF'
+category: '[SigMF]'
 
 parameters:
 - id: filename

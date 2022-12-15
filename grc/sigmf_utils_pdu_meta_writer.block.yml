@@ -1,6 +1,6 @@
 id: sigmf_utils_pdu_meta_writer
 label: SigMF PDU Metafile Writer
-category: 'SigMF'
+category: '[SigMF]'
 
 parameters:
 - id: filename

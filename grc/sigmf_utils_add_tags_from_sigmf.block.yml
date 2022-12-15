@@ -1,6 +1,6 @@
 id: sigmf_utils_add_tags_from_sigmf
 label: Add Tags From SigMF
-category: 'SigMF'
+category: '[SigMF]'
 
 templates:
   imports: |-

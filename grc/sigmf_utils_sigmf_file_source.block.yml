@@ -1,6 +1,6 @@
 id: sigmf_utils_sigmf_file_source
 label: SigMF File Source
-category: 'SigMF'
+category: '[SigMF]'
 
 templates:
   imports: |-
