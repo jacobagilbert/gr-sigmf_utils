@@ -4,7 +4,7 @@ category: '[SigMF]'
 
 templates:
   imports: |-
-    import sigmf_utils
+    from gnuradio sigmf_utils
     import pmt
   make: sigmf_utils.sigmf_file_source(${sigmf_filename}, ${output_type.name}, ${length}, ${add_begin_tag}, ${repeat}, ${add_sigmf_tags})
 

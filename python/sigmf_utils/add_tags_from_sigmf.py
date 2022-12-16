@@ -12,7 +12,7 @@ import json
 import pmt
 from os.path import isfile
 from gnuradio import gr
-import sigmf_utils
+from gnuradio import sigmf_utils
 
 class add_tags_from_sigmf(gr.sync_block):
     """
@@ -93,7 +93,7 @@ class add_tags_from_sigmf(gr.sync_block):
         for idx, capture in enumerate(self.captures):
             offset = capture.get('core:sample_start', 0)
             # if the first capture does not start with sample zero, add global tags
-            if idx == 0 and offset is not 0:
+            if idx == 0 and offset != 0:
                 for tag in self.global_tags:
                     self.item_tags.append(tag)
             # add tags if they exist

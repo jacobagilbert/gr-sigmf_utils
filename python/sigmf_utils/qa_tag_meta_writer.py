@@ -19,8 +19,7 @@ class qa_tag_meta_writer(gr_unittest.TestCase):
         self.tb = None
 
     def test_instance(self):
-        # FIXME: Test will fail until you pass sensible arguments to the constructor
-        instance = tag_meta_writer()
+        instance = tag_meta_writer('/tmp/a', 900e6, 40e6, 'burst', 'ci16_le')
 
     def test_001_descriptive_test_name(self):
         # set up fg

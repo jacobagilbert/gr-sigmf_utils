@@ -9,6 +9,7 @@
 from gnuradio import gr, gr_unittest
 # from gnuradio import blocks
 from gnuradio.sigmf_utils import add_tags_from_sigmf
+import numpy as np
 
 class qa_add_tags_from_sigmf(gr_unittest.TestCase):
 
@@ -19,8 +20,8 @@ class qa_add_tags_from_sigmf(gr_unittest.TestCase):
         self.tb = None
 
     def test_instance(self):
-        # FIXME: Test will fail until you pass sensible arguments to the constructor
-        instance = add_tags_from_sigmf()
+        md = {'global':{'core:sample_rate':1e6, 'core:datatype':'ci16_le'}, 'captures':[], 'annotations':[]}
+        instance = add_tags_from_sigmf(np.int16, md)
 
     def test_001_descriptive_test_name(self):
         # set up fg

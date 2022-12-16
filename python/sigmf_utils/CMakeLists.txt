@@ -26,7 +26,8 @@ GR_PYTHON_INSTALL(
     tag_meta_writer.py
     sigmf_file_source.py
     add_tags_from_sigmf.py
-    sigmf_tools.py DESTINATION ${GR_PYTHON_DIR}/sigmf_utils
+    sigmf_tools.py
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/sigmf_utils
 )
 
 ########################################################################
@@ -45,5 +46,5 @@ add_custom_target(
 )
 GR_ADD_TEST(qa_pdu_meta_writer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_pdu_meta_writer.py)
 GR_ADD_TEST(qa_tag_meta_writer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_meta_writer.py)
-GR_ADD_TEST(qa_sigmf_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sigmf_source.py)
+GR_ADD_TEST(qa_sigmf_file_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sigmf_file_source.py)
 GR_ADD_TEST(qa_add_tags_from_sigmf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_add_tags_from_sigmf.py)

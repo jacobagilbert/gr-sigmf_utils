@@ -10,10 +10,10 @@
 
 from gnuradio import gr
 from gnuradio import blocks
+from gnuradio import sigmf_utils
 import pmt
 import json
 from os.path import isfile, splitext
-import sigmf_utils
 import numpy
 
 

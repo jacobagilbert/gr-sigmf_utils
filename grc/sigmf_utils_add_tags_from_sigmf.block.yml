@@ -4,7 +4,7 @@ category: '[SigMF]'
 
 templates:
   imports: |-
-    import sigmf_utils
+    from gnuradio sigmf_utils
     import numpy
   make: sigmf_utils.add_tags_from_sigmf(${type.type}, ${metadata}, ${add_annotation_tags}, ${start_tag_key})
 

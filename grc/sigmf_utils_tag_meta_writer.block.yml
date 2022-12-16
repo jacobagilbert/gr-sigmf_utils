@@ -34,7 +34,7 @@ inputs:
   optional: 0
 
 templates:
-  imports: import sigmf_utils
+  imports: from gnuradio sigmf_utils
   make: sigmf_utils.tag_meta_writer(${filename}, ${freq}, ${rate}, ${label}, ${dtype})
 
 file_format: 1
