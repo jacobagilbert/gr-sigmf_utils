@@ -33,7 +33,7 @@ inputs:
   optional: 1
 
 templates:
-  imports: from gnuradio sigmf_utils
+  imports: from gnuradio import sigmf_utils
   make: sigmf_utils.pdu_meta_writer(${filename}, ${freq}, ${rate}, ${label}, ${dtype})
 
 file_format: 1
